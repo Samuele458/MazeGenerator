@@ -3,13 +3,23 @@
 #include <time.h>
 #include <unistd.h>
 
-#define SIZE 13
 #define DIR 4
 #define VALUES 19
 #define SPACE 32
+
+//config parameters
+#define SIZE 121
 #define WALL 'O'
 #define WALK '.'
-#define SPEED 100000
+#define SPEED 10000
+
+#ifdef _WIN32
+#define CLEAR_SCREEN "cls"
+#endif
+
+#ifdef linux
+#define CLEAR_SCREEN "clear"
+#endif
 
 void print_array( char const array[][ SIZE ] );
 void mazeGenerator( char array[][ SIZE ] );
@@ -24,10 +34,12 @@ int main( void ) {
     size_t start;
     srand( time ( NULL ) );
 
+    //generating maze
     mazeGenerator( labyrinth );
     setEnd( labyrinth);
     start = setStart( labyrinth );
-    //print_array( labyrinth );
+
+    //solving maze
     labyrinth[ start ][ 0 ] = WALK;
     mazeTravers( labyrinth, start, 0, 1 );
 }
@@ -61,7 +73,7 @@ void mazeGenerator( char array[][ SIZE ] ) {
     int set = 0;
 
 
-    for ( column = 0; column < SIZE; ++column ) {    //creo la struttura principale del labirinto, e le entrate
+    for ( column = 0; column < SIZE; ++column ) {
         for ( row = 0; row < SIZE; ++row ) {
             array[ column ][ row ] = WALL;
         }
@@ -125,10 +137,6 @@ void mazeGenerator( char array[][ SIZE ] ) {
             break;
         }
     }
-    /*for( cont = 0; cont < 3; ++cont ) {
-        printf( "[%d] c = %d || r = %d\n", cont, cStack[cont], rStack[cont] );
-    }
-    */
 }
 
 int setStart( char array[][ SIZE ] ) {
@@ -175,7 +183,7 @@ void mazeTravers( char array[][ SIZE ], size_t column, size_t row, unsigned int 
         if ( checkDirection( array, columnPtr, rowPtr, direction ) == 1 ) {
             array[ column ][ row ] = WALK;
             usleep( SPEED );
-            system( "clear" );
+            system( CLEAR_SCREEN );
             print_array( array );
             puts( "" );
             changeDirection( dirPtr, 2 );
@@ -188,17 +196,16 @@ void mazeTravers( char array[][ SIZE ], size_t column, size_t row, unsigned int 
 }
 
 int checkDirection( const char array[][ SIZE], size_t *column, size_t *row, const unsigned int direction ) {
-    size_t column_copy;         //creo una copia delle coordinate di column
-    size_t row_copy;            //e di row
-    size_t set_dir_c[ 4 ] = { *column, *column + 1, *column, *column - 1 }; //posizioni column
-    size_t set_dir_r[ 4 ] = { *row - 1, *row, *row + 1, *row }; //posizioni row
-    int x;  //contatore direzioni
+    size_t column_copy;         
+    size_t row_copy;            
+    size_t set_dir_c[ 4 ] = { *column, *column + 1, *column, *column - 1 }; 
+    size_t set_dir_r[ 4 ] = { *row - 1, *row, *row + 1, *row }; 
+    int x;  
     column_copy = *column;
     row_copy = *row;
-    //printf( "column = %d\nrow = %d\n", *column, *row );
 
 
-    for ( x = 0; x < 4; ++x ) {         //verifico se alla destra vi è un . e nel caso ci sia restituisco 1 sennò 0
+    for ( x = 0; x < 4; ++x ) {         
         if ( direction == x ) {
             *column = set_dir_c[ x ];
             *row = set_dir_r[ x ];
@@ -213,7 +220,7 @@ int checkDirection( const char array[][ SIZE], size_t *column, size_t *row, cons
     return 0;
 }
 
-void changeDirection( unsigned int *direction, const unsigned int mode ) { //mode 1: dir++; mode 2: dir--
+void changeDirection( unsigned int *direction, const unsigned int mode ) { 
     if ( mode == 1 ) {
         *direction += 1;
         if ( *direction == 4 ) {
@@ -239,7 +246,6 @@ void pop_stack( const size_t column, const size_t row, size_t cStack[], size_t r
     rStack[ *index ] = row;
     *index -= 1;
 }
-
 
 
 
