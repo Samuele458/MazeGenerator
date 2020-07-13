@@ -15,7 +15,7 @@ You can compile it with;
 $   gcc maze.c -o maze
 ```
 
-Settings must be choosen before compiling, by modifying these lines:
+Settings must be chosen before compiling, by modifying these lines:
 
 ```
 
