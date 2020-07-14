@@ -3,7 +3,7 @@ A simple maze generator and solver!
 
 > <b>Warning</b>, this is an old and not optimized project!
 
-<img src="img/preview.gif?raw=true" alt="Girl in a jacket" width="500" height="500"> 
+<img src="img/preview.gif?raw=true" alt="maze" width="500" height="500"> 
 
 
 
